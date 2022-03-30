@@ -2,26 +2,23 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import 'antd/dist/antd.css';
 import './index.css';
-import { Button, Icon, Select, Input, Row, Col, Tabs, Table, List ,message} from 'antd';
+import {
+  Button,
+  Icon,
+  Select,
+  Input,
+  Row,
+  Col,
+  Tabs,
+  Table,
+  List,
+  message,
+  Modal,
+} from 'antd';
 const { Option } = Select;
 const { TabPane } = Tabs;
 
 const Demo = () => {
-  const data = [
-    {
-      title: 'Ant Design Title 1',
-    },
-    {
-      title: 'Ant Design Title 2',
-    },
-    {
-      title: 'Ant Design Title 3',
-    },
-    {
-      title: 'Ant Design Title 4',
-    },
-  ];
-
   const columns = [
     {
       title: '姓名',
@@ -38,19 +35,41 @@ const Demo = () => {
       dataIndex: 'address',
       key: 'address',
     },
+    {
+      title: '操作',
+      dataIndex: 'operation',
+      key: 'operation',
+      render: (text, record, index) => {
+        console.log(record);
+        return (
+          <Button
+            type="link"
+            onClick={() => {
+              Modal.info({
+                title: '测试',
+                content: '当前用户名称:' + record.name,
+              });
+            }}
+          >
+            查看
+          </Button>
+        );
+      },
+    },
   ];
 
   const [dataSource, setdataSource] = React.useState([]);
   const [dataList, setdataList] = React.useState([]);
 
+  //表格方法
   const onAddTab = React.useCallback(() => {
-    if(dataSource.length>=5){
-        message.warning('最多新增五条！');
-        return;
-     }
+    if (dataSource.length >= 5) {
+      message.warning('最多新增五条！');
+      return;
+    }
     const data = {
       key: '',
-      name: '胡彦斌',
+      name: '胡彦斌' + (dataSource.length + 1),
       age: 32,
       address: '西湖区湖底公园1号',
     };
@@ -66,33 +85,31 @@ const Demo = () => {
   }, [dataSource]);
 
   const onDelTab = React.useCallback(() => {
-    alert(dataSource.length);
     const newdata = [].concat(dataSource);
     newdata.pop();
     setdataSource(newdata);
   }, [dataSource]);
 
+  //列表方法
   const onAddList = React.useCallback(() => {
-  //   if(dataSource.length>=5){
-  //     message.warning('最多新增五条！');
-  //     return;
-  //  }
-  const data = {
-    key: '',
-    name: '胡彦斌',
-    age: 32,
-    address: '西湖区湖底公园1号',
-  };
-  const a =
-    dataSource.length === 0
-      ? (data.key = '1')
-      : (data.key = String(
-          Number(dataSource[dataSource.length - 1].key) + 1
-        ));
-  const newdata = [].concat(dataSource);
-  newdata.push(data);
-  setdataSource(newdata);
-  }, [dataSource]);
+    if (dataList.length >= 5) {
+      message.warning('最多新增五条！');
+      return;
+    }
+    const newdata = [].concat(dataList);
+    newdata.push({
+      title: 'Ant Design Title' + (dataList.length + 1),
+      description:
+        'Ant Design, a design language for background applications, is refined by Ant UED Team',
+    });
+    setdataList(newdata);
+  }, [dataList]);
+
+  const onDelList = React.useCallback(() => {
+    const newdata = [].concat(dataList);
+    newdata.pop();
+    setdataList(newdata);
+  }, [dataList]);
   return (
     <>
       <div>
@@ -113,7 +130,7 @@ const Demo = () => {
           suffix="RMB"
         ></Input>
 
-        <Tabs defaultActiveKey="1">
+        <Tabs defaultActiveKey="2">
           <TabPane tab="Tab 1" key="1">
             <Row>
               <Col span={8}>
@@ -151,25 +168,41 @@ const Demo = () => {
             </Row>
           </TabPane>
           <TabPane tab="Tab 2" key="2">
-            <Button icon="plus" onClick={onAddTab}>新增</Button>
-            <Button icon="minus" onClick={onDelTab}>删除</Button>
+            <Row>
+              <Col span={4}>
+                <Button icon="plus" onClick={onAddTab}>
+                  新增
+                </Button>
+              </Col>
+              <Col>
+                <Button icon="minus" onClick={onDelTab}>
+                  删除
+                </Button>
+              </Col>
+            </Row>
             <Table dataSource={dataSource} columns={columns} />;
           </TabPane>
           <TabPane tab="Tab 3" key="3">
-            <Button icon="plus" onClick={}>
-              新增
-            </Button>
-            <Button icon="minus" onClick={}>
-              删除
-            </Button>
+            <Row>
+              <Col span={4}>
+                <Button icon="plus" onClick={onAddList}>
+                  新增
+                </Button>
+              </Col>
+              <Col>
+                <Button icon="minus" onClick={onDelList}>
+                  删除
+                </Button>
+              </Col>
+            </Row>
             <List
               itemLayout="horizontal"
-              dataSource={data}
+              dataSource={dataList}
               renderItem={(item) => (
                 <List.Item>
                   <List.Item.Meta
                     title={<a href="#">{item.title}</a>}
-                    description="Ant Design, a design language for background applications, is refined by Ant UED Team"
+                    description={item.description}
                   />
                 </List.Item>
               )}
