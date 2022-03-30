@@ -168,33 +168,21 @@ const Demo = () => {
             </Row>
           </TabPane>
           <TabPane tab="Tab 2" key="2">
-            <Row>
-              <Col span={4}>
-                <Button icon="plus" onClick={onAddTab}>
-                  新增
-                </Button>
-              </Col>
-              <Col>
-                <Button icon="minus" onClick={onDelTab}>
-                  删除
-                </Button>
-              </Col>
-            </Row>
+            <Button icon="plus" onClick={onAddTab}>
+              新增
+            </Button>
+            <Button icon="minus" onClick={onDelTab}>
+              删除
+            </Button>
             <Table dataSource={dataSource} columns={columns} />;
           </TabPane>
           <TabPane tab="Tab 3" key="3">
-            <Row>
-              <Col span={4}>
-                <Button icon="plus" onClick={onAddList}>
-                  新增
-                </Button>
-              </Col>
-              <Col>
-                <Button icon="minus" onClick={onDelList}>
-                  删除
-                </Button>
-              </Col>
-            </Row>
+            <Button icon="plus" onClick={onAddList}>
+              新增
+            </Button>
+            <Button icon="minus" onClick={onDelList}>
+              删除
+            </Button>
             <List
               itemLayout="horizontal"
               dataSource={dataList}
